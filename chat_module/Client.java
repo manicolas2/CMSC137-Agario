@@ -28,9 +28,32 @@ public final class Client extends Thread {
 
 	// Create a lobby then automatically connect to created lobby then chat
 	// return true if successful
-	public boolean createALobby(String lobby_id) {
+	public boolean createALobby(int maxPlayers) {
+		TcpPacket.CreateLobbyPacket.Builder createLobby = TcpPacket.CreateLobbyPacket.newBuilder()
+				.setType(TcpPacket.PacketType.CREATE_LOBBY)
+				.setMaxPlayers(maxPlayers);
+		
+		try {
+			this.out.write(createLobby.build().toByteArray());
+			while(in.available() == 0){}
+			byte[] bytes = new byte[in.available()];
+			in.read(bytes);
+			TcpPacket msg = TcpPacket.parseFrom(bytes);
+			TcpPacket.PacketType msg_type = msg.getType();
+			System.out.println(msg);
+			// If ConnectPacket, successful
+			if(msg_type == TcpPacket.PacketType.CREATE_LOBBY) {
+				TcpPacket.CreateLobbyPacket message = TcpPacket.CreateLobbyPacket.parseFrom(bytes);	
+				System.out.println("You have created chat lobby. {" + message.getLobbyId() + "}");
+				//this.host = true;
+				return true;
+			}
+
+		} catch(Exception e) {
+			System.out.print(e);
+		}
 		return false;
-	}
+	}	
 
 	// Connect to a lobby
 	public boolean connectToLobby(String lobby_id) {

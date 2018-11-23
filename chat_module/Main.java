@@ -48,12 +48,30 @@ public final class Main {
 
 			// Create a lobby
 			} else if(input == 2) {
+				System.out.print("Enter max players: ");
+				int max_player = sc.nextInt();
+				sc.nextLine();
+				if(this.client.createALobby(max_player)) {
+					System.out.println("[1] Connect to Lobby");
+					System.out.println("[0] Exit");
+					input = sc.nextInt();
+					sc.nextLine();
 
+					if(input == 1) {
+						System.out.print("Enter lobby id: ");
+						String lobby_id = sc.nextLine();
+
+						// If connected to lobby
+						if(this.client.connectToLobby(lobby_id)) {
+							this.client.start(); 	//start chat thread
+							this.client.chat();		//start loop of sending message
+						}
+					}
+				}
 			}
 
 			// Disconnect from server
 			server.close();
-			System.out.println("Disconnected from server");
 		} catch(IOException e) {
 			e.printStackTrace();
             System.out.println("Cannot find (or disconnected from) Server");
