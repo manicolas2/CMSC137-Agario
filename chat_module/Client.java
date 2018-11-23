@@ -56,7 +56,11 @@ public final class Client extends Thread {
 			if(msg_type == TcpPacket.PacketType.CONNECT) {
 				System.out.println("You are connected to chat lobby.");
 				return true;
-			}
+			} else if(msg_type == TcpPacket.PacketType.ERR_LDNE) {
+				System.out.println("Error: Lobby does not exist.");
+			} else if(msg_type == TcpPacket.PacketType.ERR_LFULL) {
+				System.out.println("Error: Lobby is full.");
+			} 
 			// Handle other error
 			
 		} catch(IOException e) {
@@ -68,14 +72,12 @@ public final class Client extends Thread {
 	// Send DisconnectPacket and handle packets received
 	// return true when successful <- di ako sure if needed
 	private void disconnectFromLobby() {
-		System.out.println("Will disconnect");
 		TcpPacket.DisconnectPacket.Builder disconnect = TcpPacket.DisconnectPacket.newBuilder()
 			.setType(TcpPacket.PacketType.DISCONNECT);
 
 		try{
 			// Send DisconnectPacket
 			out.write(disconnect.build().toByteArray());
-			System.out.println("Have sent");
 		} catch(Exception e){ System.out.println(e);}
 	}
 
@@ -84,6 +86,7 @@ public final class Client extends Thread {
 
 		String msg;
 		while(!(msg = this.sc.nextLine()).equals(":q")) {
+			if(!this.connected) return;
 			TcpPacket.ChatPacket.Builder chat = TcpPacket.ChatPacket.newBuilder()
 				.setType(TcpPacket.PacketType.CHAT)
 				.setMessage(msg)
@@ -117,6 +120,10 @@ public final class Client extends Thread {
 			} else if(msg_type == TcpPacket.PacketType.DISCONNECT) {
 				TcpPacket.DisconnectPacket message = TcpPacket.DisconnectPacket.parseFrom(bytes);
 				System.out.println(message.getPlayer().getName() + " have disconnected from lobby.");
+			} else if(msg_type == TcpPacket.PacketType.ERR) {
+				TcpPacket.ErrPacket message = TcpPacket.ErrPacket.parseFrom(bytes);
+				System.out.println("Error: " + message.getErrMessage());
+				// this.setDisconnect();
 			}
 			// Should try to handle other types??
 		} catch(Exception e) {} 
