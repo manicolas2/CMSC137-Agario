@@ -107,7 +107,7 @@ public final class Client extends Thread {
 
 			if(msg_type == TcpPacket.PacketType.CHAT) {
 				TcpPacket.ChatPacket message = TcpPacket.ChatPacket.parseFrom(bytes);
-				if(message.hasPlayer()) System.out.println(message.getPlayer() + "::" + message.getMessage());
+				if(message.hasPlayer()) System.out.println(message.getPlayer().getName() + "::" + message.getMessage());
 				else System.out.println("::" + message.getMessage());
 			}
 			// Should try to handle other types??
