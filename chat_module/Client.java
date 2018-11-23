@@ -40,7 +40,6 @@ public final class Client extends Thread {
 			in.read(bytes);
 			TcpPacket msg = TcpPacket.parseFrom(bytes);
 			TcpPacket.PacketType msg_type = msg.getType();
-			System.out.println(msg);
 			// If ConnectPacket, successful
 			if(msg_type == TcpPacket.PacketType.CREATE_LOBBY) {
 				TcpPacket.CreateLobbyPacket message = TcpPacket.CreateLobbyPacket.parseFrom(bytes);	
