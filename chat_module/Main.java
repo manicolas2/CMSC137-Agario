@@ -52,9 +52,8 @@ public final class Main {
 			}
 
 			// Disconnect from server
-			client.setDisconnect(); //To end thread
-			System.out.println("Disconnected from server");
 			server.close();
+			System.out.println("Disconnected from server");
 		} catch(IOException e) {
 			e.printStackTrace();
             System.out.println("Cannot find (or disconnected from) Server");

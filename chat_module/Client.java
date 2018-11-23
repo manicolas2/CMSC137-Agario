@@ -44,6 +44,8 @@ public final class Client extends Thread {
 		try{
 			// Send ConnectPacket
 			this.out.write(connect.build().toByteArray());	
+
+			// Check response 
 			while(in.available() == 0){}
 			byte[] bytes = new byte[in.available()];
 			in.read(bytes);
@@ -65,17 +67,23 @@ public final class Client extends Thread {
 
 	// Send DisconnectPacket and handle packets received
 	// return true when successful <- di ako sure if needed
-	private boolean disconnectFromLobby() {
-		return false;
+	private void disconnectFromLobby() {
+		System.out.println("Will disconnect");
+		TcpPacket.DisconnectPacket.Builder disconnect = TcpPacket.DisconnectPacket.newBuilder()
+			.setType(TcpPacket.PacketType.DISCONNECT);
+
+		try{
+			// Send DisconnectPacket
+			out.write(disconnect.build().toByteArray());
+			System.out.println("Have sent");
+		} catch(Exception e){ System.out.println(e);}
 	}
 
 	public void chat() {
 		System.out.println("type :q to disconnect from lobby");
 
 		String msg;
-		do {
-			msg = this.sc.nextLine();
-			
+		while(!(msg = this.sc.nextLine()).equals(":q")) {
 			TcpPacket.ChatPacket.Builder chat = TcpPacket.ChatPacket.newBuilder()
 				.setType(TcpPacket.PacketType.CHAT)
 				.setMessage(msg)
@@ -83,12 +91,9 @@ public final class Client extends Thread {
 			try{
 				out.write(chat.build().toByteArray());	
 			} catch(Exception e){}
-		} while(!msg.equals(":q"));
-
-		// Disconnect
-		this.setDisconnect(); //Update flag to end thread
-		// Call disconnectFromLobby()
-		// ->
+		};
+		this.disconnectFromLobby();
+		this.setDisconnect();
 	}
 
 	// Update flag
@@ -109,6 +114,9 @@ public final class Client extends Thread {
 				TcpPacket.ChatPacket message = TcpPacket.ChatPacket.parseFrom(bytes);
 				if(message.hasPlayer()) System.out.println(message.getPlayer().getName() + "::" + message.getMessage());
 				else System.out.println("::" + message.getMessage());
+			} else if(msg_type == TcpPacket.PacketType.DISCONNECT) {
+				TcpPacket.DisconnectPacket message = TcpPacket.DisconnectPacket.parseFrom(bytes);
+				System.out.println(message.getPlayer().getName() + " have disconnected from lobby.");
 			}
 			// Should try to handle other types??
 		} catch(Exception e) {} 
