@@ -1,0 +1,44 @@
+package agario;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public final class Blob extends JPanel implements Runnable{
+
+	JFrame frame = new JFrame();
+	Thread t = new Thread(this);
+	BufferedImage offscreen;
+	/*Basic constructor for Blob*/
+	public Blob(){
+		frame.setTitle("AGARIO");
+		frame.getContentPane().add(this);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(750,500);
+		frame.setVisible(true);
+		offscreen = (BufferedImage)this.createImage(750,500);
+		
+		t.start();
+	}
+	
+	
+	public void paintComponent(Graphics g){
+		g.drawImage(offscreen, 0,0,null);
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true){
+			try{
+				Thread.sleep(1);
+			}catch(Exception e){}
+			
+			offscreen.getGraphics().fillOval(20, 20, 50, 50);
+			
+			frame.repaint();
+		}
+	}
+
+}

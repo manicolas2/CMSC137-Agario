@@ -1,0 +1,26 @@
+package agario;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public final class blob extends JPanel implements Runnable{
+
+	JFrame frame = new JFrame();
+	
+	Thread t = new Thread(this);
+	
+	public blob(){
+		frame.setTitle("AGARIO");
+		frame.getContentPane().add(this);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(500,500);
+		frame.setVisible(true);
+		
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
