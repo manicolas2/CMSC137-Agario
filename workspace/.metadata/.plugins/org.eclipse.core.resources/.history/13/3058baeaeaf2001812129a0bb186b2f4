@@ -13,10 +13,10 @@ public final class Blob extends JPanel implements Runnable{
 	Thread t = new Thread(this);
 	BufferedImage offscreen;
 	int x, y;
-	final static int RIGHT_END = 700;
+	final static int RIGHT_END = 750;
 	final static int LEFT_END = 0;
 	final static int TOP_END = 0;
-	final static int DOWN_END = 400;
+	final static int DOWN_END = 500;
 
 	/*Basic constructor for Blob*/
 	public Blob(){
@@ -66,12 +66,12 @@ public final class Blob extends JPanel implements Runnable{
 		}
 	}
 	public void goLeft(){
-		if(this.x != LEFT_END){
+		if(this.y != LEFT_END){
 			this.x -= 5;
 		}	
 	}
 	public void goRight(){
-		if(this.x != RIGHT_END){
+		if(this.y != RIGHT_END){
 			this.x += 5;
 		}
 	}
