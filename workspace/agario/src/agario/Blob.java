@@ -1,93 +1,62 @@
 package agario;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public final class Blob extends JPanel implements Runnable{
-
-	JFrame frame = new JFrame();
-	Thread t = new Thread(this);
-	BufferedImage offscreen;
-	int x, y;
-	final static int RIGHT_END = 700;
-	final static int LEFT_END = 0;
-	final static int TOP_END = 0;
-	final static int DOWN_END = 400;
-
+public final class Blob extends GameObject implements Runnable{
+	public static int size = 0;
+	public static int score = 0;
+	Handler handler;
+	
 	/*Basic constructor for Blob*/
-	public Blob(){
-		this.x = 25;
-		this.y = 25;
-		frame.setTitle("AGARIO");
-		frame.getContentPane().add(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addKeyListener(new KeyListener(){ //listen to the keyAction moved by the user
-			public void keyPressed(KeyEvent ke){
-			if(ke.getKeyCode()==KeyEvent.VK_W){
-				goUp();
-			}
-			if(ke.getKeyCode()==KeyEvent.VK_A){
-				goLeft();
-			}
-			if(ke.getKeyCode()==KeyEvent.VK_S){
-				goDown();
-			}
-			if(ke.getKeyCode()==KeyEvent.VK_D){
-				goRight();
-			}
-			}
-			public void keyTyped(KeyEvent ke){}
-			public void keyReleased(KeyEvent ke){}
-		});
-		frame.setSize(750,500);
-		frame.setFocusable(true);
-		frame.setVisible(true);
-		t.start();
+	public Blob(int x, int y, ID id, Handler handler){
+		super(x, y, id);
+		this.handler = handler;
 	}
 	
-	
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		g.fillOval(x,y,50,50);
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, 50+size, 50+size);
+		
 	}
 	
-	public void goUp(){
-		if(this.y != TOP_END){
-			this.y -= 5;
-		}
+	public void tick() {
+		x += speedX;
+		y += speedY;
+		
+		x = Game.clamp(x, 0, Game.WIDTH - (50 + size));
+		y = Game.clamp(y, 0, Game.HEIGHT -(80 + size));
+		
+		collision();
 	}
-	public void goDown(){
-		if(this.y != DOWN_END){
-			this.y += 5;
-		}
-	}
-	public void goLeft(){
-		if(this.x != LEFT_END){
-			this.x -= 5;
-		}	
-	}
-	public void goRight(){
-		if(this.x != RIGHT_END){
-			this.x += 5;
+	
+	private void collision() {
+		for(int i = 0; i < handler.object.size(); i++) {
+			GameObject tempObject = handler.object.get(i);
+			
+			if(tempObject.getID() == ID.Food) {
+				if(getBounds().intersects(tempObject.getBounds())) {
+					size++;
+					score++;
+					handler.removeObject(tempObject);
+					
+					System.out.println(size);
+				}
+			}
 		}
 	}
 	
+	public void render(Graphics g) {
+		g.setColor(Color.black);
+		g.fillOval(x, y, 50+size, 50+size);
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while(true){
-			try{
-				Thread.sleep(1);
-			}catch(Exception e){}
-			
-			
-			frame.revalidate();
-			frame.repaint();
-		}
+		
 	}
-
 }
