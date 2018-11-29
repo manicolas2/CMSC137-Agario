@@ -1,0 +1,39 @@
+package agario;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class Menu extends JFrame{
+	Container contentPane;
+	private static final int PADDING = 100;
+	private JPanel titlePanel;
+	private JPanel buttonsPanel;
+	private JLabel titleLabel;
+	private JPanel[] buttonInPanel = new JPanel[4];
+	private JButton[] menuButtons = new JButton[4];
+	
+	
+	public Menu() {
+		super("Agario");
+		this.setLayout(new GridLayout(2,1));
+		this.setPreferredSize(new Dimension(1200,600));
+		this.setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		contentPane = this.getContentPane();	
+		contentPane.setBackground(Color.decode("#0C0000"));
+	}
+}

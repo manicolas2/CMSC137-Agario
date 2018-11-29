@@ -1,0 +1,11 @@
+package agario;
+
+public class Menu extends JFrame{
+
+	
+	
+	
+	public Menu() {
+		
+	}
+}

@@ -1,0 +1,72 @@
+package agario;
+
+import java.awt.Graphics;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+public final class main extends JPanel{
+	static JFrame frame = new JFrame();
+	static int x = 0;
+    static int y = 0;
+	
+	public void startGame() {
+		// TODO Auto-generated method stub
+		Thread t = new Thread();
+		Blob blob = new Blob();
+		frame.setTitle("AGARIO");
+		frame.getContentPane().add(blob);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addKeyListener(new KeyListener(){ //listen to the keyAction moved by the user
+			public void keyPressed(KeyEvent ke){
+			if(ke.getKeyCode()==KeyEvent.VK_W){
+				blob.goUp();
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_A){
+				blob.goLeft();
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_S){
+				blob.goDown();
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_D){
+				blob.goRight();
+			}
+			}
+			public void keyTyped(KeyEvent ke){}
+			public void keyReleased(KeyEvent ke){}
+		});
+		
+		while(true) {
+			try {
+				Random ran = new Random();
+				Thread.sleep(r.nextInt(50));
+				
+				double distance = Math.sqrt(x*x + y*y);
+                double space = 180/b.size;
+                
+                if(r.nextInt(10) == 5) {
+                	int randX = r.nextInt(600);
+                    int randY = r.nextInt(600);
+                    Food f = new Food(randX, randY);
+                    synchronized(dots){
+                        dots.add(f);
+                    }
+                }
+			}
+		}
+		
+		frame.setSize(750,500);
+		frame.setFocusable(true);
+		frame.setVisible(true);
+
+		blob.setFrame(frame);
+		blob.start();
+	}
+	
+	public static void main(String[] args) {
+		startGame();
+	}
+
+}

@@ -1,0 +1,27 @@
+package agario;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.util.Random;
+
+public final class Food extends Component{
+	public int x;
+	public int y;
+	public Color c;
+	
+	public Food(int x, int y){
+		this.x = x;
+		this.y = y;
+		Random rand = new Random();
+		int r = rand.nextInt(255);
+		int green = rand.nextInt(255);
+		int b = rand.nextInt(255);
+		this.c = new Colot(r,green,b);
+	}
+	
+	public void paint(Graphics g){
+		g.setColor(c);
+		g.fillOval(this.x, this.y, 10, 10);
+	}
+}

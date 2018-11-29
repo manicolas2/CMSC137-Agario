@@ -1,0 +1,13 @@
+package agario;
+
+public abstract class GameObject {
+	
+	protected int x, y;
+	protected ID id;
+	protected int speedX speedY;
+	
+	public GameObject(int x, int y, ID id) {
+		
+	}
+}
+ 

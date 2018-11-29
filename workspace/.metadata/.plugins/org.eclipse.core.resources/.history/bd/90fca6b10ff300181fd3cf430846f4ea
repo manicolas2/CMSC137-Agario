@@ -1,0 +1,14 @@
+package agario;
+
+import java.util.ArrayList;
+
+public final class main {
+
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Blob blob = new Blob();
+	}
+
+}

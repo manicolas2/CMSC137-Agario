@@ -1,0 +1,31 @@
+package agario;
+
+public abstract class GameObject {
+	
+	protected int x, y;
+	protected ID id;
+	protected int speedX, speedY;
+	
+	public GameObject(int x, int y, ID id) {
+		this.x = x;
+		this.y = y;
+		this.id = id;
+	}
+
+	public abstract void tick();
+	public abstract void render(Graphics g);
+	
+	public void setX() {
+		this.x = x;
+	}
+	public void setY() {
+		this.y = y;
+	}
+	public void getX() {
+		this.x = x;
+	}
+	public void geTY() {
+		this.y = y;
+	}
+}
+ 

@@ -1,0 +1,10 @@
+package agario;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.util.Random;
+
+public final class Food extends Component{
+
+}

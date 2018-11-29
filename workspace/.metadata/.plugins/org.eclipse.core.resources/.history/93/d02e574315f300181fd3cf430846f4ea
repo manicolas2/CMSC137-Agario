@@ -1,0 +1,12 @@
+package agario;
+
+import javax.swing.JFrame;
+
+public class Game {
+	JFrame frame = new JFrame();
+	
+	public s
+	
+	
+	
+}

@@ -1,0 +1,17 @@
+package agario;
+
+import javax.swing.JFrame;
+
+public class Game {
+	JFrame frame = new JFrame();
+	Blob blob = new Blob();
+	
+	
+	public Game() {
+		frame.setTitle("AGARIO");
+
+	}
+	
+	
+	
+}

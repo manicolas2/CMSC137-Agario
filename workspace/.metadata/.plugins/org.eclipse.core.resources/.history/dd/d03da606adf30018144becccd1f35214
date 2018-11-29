@@ -1,0 +1,36 @@
+package agario;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public final class Blob extends GameObject implements Runnable{
+	public size;
+	public score;
+	
+	/*Basic constructor for Blob*/
+	public Blob(int x, int y, ID id){
+		super(x, y, id);
+	}
+	
+	public void tick() {
+		x += speedX;
+		y += speedY;
+		
+		x = Game.clamp(x, 0, Game.WIDTH - 50);
+		y = Game.clamp(y, 0, Game.HEIGHT - 80);
+	}
+	
+	public void render(Graphics g) {
+		g.setColor(Color.black);
+		g.fillOval(x,y,50,50);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+}

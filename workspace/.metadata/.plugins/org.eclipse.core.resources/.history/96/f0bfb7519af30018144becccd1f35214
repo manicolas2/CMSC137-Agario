@@ -1,0 +1,82 @@
+package agario;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public final class Blob extends GameObject implements Runnable{
+//
+//	JFrame frame;
+//	Thread t = new Thread(this);
+//	// BufferedImage offscreen;
+//	final static int RIGHT_END = 700;
+//	final static int LEFT_END = 0;
+//	final static int TOP_END = 0;
+//	final static int DOWN_END = 400;
+//
+	/*Basic constructor for Blob*/
+	public Blob(int x, int y, ID id){
+		super(x, y, id);
+	}
+	
+	public void tick() {
+		
+	}
+	
+	public void render(Graphics g) {
+		g.setColor(Color.black);
+		g.fillOval(x,y,50,50);
+	}
+//	
+//	public void paintComponent(Graphics g){
+//		super.paintComponent(g);
+//		g.fillOval(x,y,50,50);
+//	}
+//	
+//	public void goUp(){
+//		if(this.y != TOP_END){
+//			this.y -= 5;
+//		}
+//	}
+//	public void goDown(){
+//		if(this.y != DOWN_END){
+//			this.y += 5;
+//		}
+//	}
+//	public void goLeft(){
+//		if(this.x != LEFT_END){
+//			this.x -= 5;
+//		}	
+//	}
+//	public void goRight(){
+//		if(this.x != RIGHT_END){
+//			this.x += 5;
+//		}
+//	}
+//	public void start(){
+//		this.t.run();
+//	}
+//	@Override
+//	public void run() {
+//		// TODO Auto-generated method stub
+//		while(true){
+//			try{
+//				Thread.sleep(1);
+//			}catch(Exception e){}
+//			
+//			frame.revalidate();
+//			frame.repaint();
+//		}
+//	}
+//
+//	public void setFrame(JFrame frame){
+//		this.frame = frame;
+//	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+}

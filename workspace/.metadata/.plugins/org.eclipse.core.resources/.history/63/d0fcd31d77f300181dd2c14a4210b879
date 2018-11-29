@@ -1,0 +1,16 @@
+package agario;
+
+public class Menu extends JFrame{
+	Container contentPane;
+	private static final int PADDING = 100;
+	private JPanel titlePanel;
+	private JPanel buttonsPanel;
+	private JLabel titleLabel;
+	private JPanel[] buttonInPanel = new JPanel[4];
+	private JButton[] menuButtons = new JButton[4];
+	
+	
+	public Menu() {
+		
+	}
+}
