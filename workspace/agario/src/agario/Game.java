@@ -7,23 +7,26 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable{
+	// variables and constants
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 500;
-	public static final int HEIGHT = 500;
-	
+	public static final int WIDTH = 750;
+	public static final int HEIGHT = 750;
 	private Thread thread;
 	private boolean running = false;
-	
 	private Handler handler;
 	private Random r;
+	
+	/*
+	 The game constructor, it creates the window and the objects needed
+	 in the game such as the blob and the food.
+	 */
 	
 	public Game() {
 		new Window(WIDTH, HEIGHT, "Agario", this);
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
-		
 		handler.addObject(new Blob(25, 25, ID.Blob, handler));
-		
+		this.requestFocusInWindow(true); // this will make the game focus on the window for interaction
 		// add food
 		while(true) {
 			r = new Random();
@@ -86,6 +89,9 @@ public class Game extends Canvas implements Runnable{
 		handler.tick();
 	}
 	
+	/*
+	 UI Stuff
+	 */
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
@@ -104,6 +110,9 @@ public class Game extends Canvas implements Runnable{
 		bs.show();
 	}
 	
+	/*
+	 This method clamps the screen, preventing objects to go over the borders of the window
+	 */
 	public static int clamp(int var, int min, int max) {
 		if(var >= max) return var = max;
 		else if(var <= min) return var = min;

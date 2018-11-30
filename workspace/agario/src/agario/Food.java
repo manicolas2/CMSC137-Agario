@@ -1,7 +1,6 @@
 package agario;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
@@ -9,6 +8,9 @@ import java.util.Random;
 public class Food extends GameObject{
 	public Color c;
 	
+	/*
+	 Basic constructor for food
+	 */
 	public Food(int x, int y, ID id){
 		super(x, y, id);
 		

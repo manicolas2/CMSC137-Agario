@@ -33,6 +33,9 @@ public final class Blob extends GameObject implements Runnable{
 		collision();
 	}
 	
+	/*
+	 Method for checking collision of blob and food
+	 */
 	private void collision() {
 		for(int i = 0; i < handler.object.size(); i++) {
 			GameObject tempObject = handler.object.get(i);
@@ -48,7 +51,9 @@ public final class Blob extends GameObject implements Runnable{
 			}
 		}
 	}
-	
+	/*
+	 UI Stuff
+	 */
 	public void render(Graphics g) {
 		g.setColor(Color.black);
 		g.fillOval(x, y, 50+size, 50+size);
