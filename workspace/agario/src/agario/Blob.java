@@ -27,7 +27,7 @@ public final class Blob extends GameObject implements Runnable{
 		x += speedX;
 		y += speedY;
 		
-		x = Game.clamp(x, 0, Game.WIDTH - (50 + size));
+		x = Game.clamp(x, 0, 750 - (50 + size));
 		y = Game.clamp(y, 0, Game.HEIGHT -(80 + size));
 		
 		collision();

@@ -1,15 +1,19 @@
 package agario;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 public class Game extends Canvas implements Runnable{
 	// variables and constants
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 750;
+	public static final int WIDTH = 1050;
 	public static final int HEIGHT = 750;
 	private Thread thread;
 	private boolean running = false;
@@ -22,7 +26,16 @@ public class Game extends Canvas implements Runnable{
 	 */
 	
 	public Game() {
-		new Window(WIDTH, HEIGHT, "Agario", this);
+		Window gameWindow = new Window(WIDTH, HEIGHT, "Agario", this);
+//		JPanel gamePanel = gameWindow.getPanel();
+//		
+		ChatPanel chat = new ChatPanel();
+//		gamePanel.add(chat);
+//		gamePanel.validate();
+		
+		JFrame gameFrame = gameWindow.getFrame();
+		gameFrame.add(chat, BorderLayout.EAST);
+		gameFrame.pack();
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
 		handler.addObject(new Blob(25, 25, ID.Blob, handler));
