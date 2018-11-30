@@ -3,9 +3,6 @@ package agario;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public final class Blob extends GameObject implements Runnable{
 	public static int size = 0;
@@ -27,12 +24,15 @@ public final class Blob extends GameObject implements Runnable{
 		x += speedX;
 		y += speedY;
 		
-		x = Game.clamp(x, 0, Game.WIDTH - (50 + size));
+		x = Game.clamp(x, 0, 750 - (50 + size));
 		y = Game.clamp(y, 0, Game.HEIGHT -(80 + size));
 		
 		collision();
 	}
 	
+	/*
+	 Method for checking collision of blob and food
+	 */
 	private void collision() {
 		for(int i = 0; i < handler.object.size(); i++) {
 			GameObject tempObject = handler.object.get(i);
@@ -42,13 +42,13 @@ public final class Blob extends GameObject implements Runnable{
 					size++;
 					score++;
 					handler.removeObject(tempObject);
-					
-					System.out.println(size);
 				}
 			}
 		}
 	}
-	
+	/*
+	 UI Stuff
+	 */
 	public void render(Graphics g) {
 		g.setColor(Color.black);
 		g.fillOval(x, y, 50+size, 50+size);
