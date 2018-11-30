@@ -23,7 +23,6 @@ public class Window extends Canvas{
 		frame.setLayout(new BorderLayout());
 		
 		chatPanel.add(chat);
-//		gamePanel.add(game);
 	
 		frame.add(game,BorderLayout.CENTER);
 		frame.add(chatPanel,BorderLayout.LINE_END);
