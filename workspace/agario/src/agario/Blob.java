@@ -3,9 +3,6 @@ package agario;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public final class Blob extends GameObject implements Runnable{
 	public static int size = 0;
@@ -45,8 +42,6 @@ public final class Blob extends GameObject implements Runnable{
 					size++;
 					score++;
 					handler.removeObject(tempObject);
-					
-					System.out.println(size);
 				}
 			}
 		}

@@ -10,8 +10,8 @@ public class ChatPanel extends JPanel{
 	
 	// Constructor
 	public ChatPanel() {
-		this.setBackground(Color.BLACK);
-		this.setPreferredSize(new Dimension(300, 750));
+		this.setBackground(Color.WHITE);
+		this.setPreferredSize(new Dimension(300, 750));	
 		this.setOpaque(true);
 	}
 	

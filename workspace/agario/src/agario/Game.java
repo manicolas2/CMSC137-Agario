@@ -3,12 +3,13 @@ package agario;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Game extends Canvas implements Runnable{
 	// variables and constants
@@ -26,12 +27,8 @@ public class Game extends Canvas implements Runnable{
 	 */
 	
 	public Game() {
-		Window gameWindow = new Window(WIDTH, HEIGHT, "Agario", this);
-//		JPanel gamePanel = gameWindow.getPanel();
-//		
+		Window gameWindow = new Window(WIDTH, HEIGHT, "Agario", this);	
 		ChatPanel chat = new ChatPanel();
-//		gamePanel.add(chat);
-//		gamePanel.validate();
 		
 		JFrame gameFrame = gameWindow.getFrame();
 		gameFrame.add(chat, BorderLayout.EAST);
@@ -76,7 +73,6 @@ public class Game extends Canvas implements Runnable{
 		double ns = 1000000000 / amountofTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
-		int frames = 0;
 		while(running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -87,12 +83,9 @@ public class Game extends Canvas implements Runnable{
 			}
 			if(running)
 				render();
-			frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println("FPS: " + frames);
-				frames = 0;
 			}
 		}
 		stop();

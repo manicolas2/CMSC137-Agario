@@ -3,10 +3,6 @@ package agario;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.FocusListener;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
