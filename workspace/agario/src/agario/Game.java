@@ -28,11 +28,11 @@ public class Game extends Canvas implements Runnable{
 	
 	public Game() {
 		Window gameWindow = new Window(WIDTH, HEIGHT, "Agario", this);	
-		ChatPanel chat = new ChatPanel();
+//		ChatPanel chat = new ChatPanel();
 		
-		JFrame gameFrame = gameWindow.getFrame();
-		gameFrame.add(chat, BorderLayout.EAST);
-		gameFrame.pack();
+//		JFrame gameFrame = gameWindow.getFrame();
+//		gameFrame.add(chat, BorderLayout.EAST);
+//		gameFrame.pack();
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
 		handler.addObject(new Blob(25, 25, ID.Blob, handler));

@@ -16,35 +16,42 @@ public class ChatPanel extends JPanel{
     private static JScrollPane scrollArea;
     private static JTextField messageField;
     private static JTextArea messageBox;
+    private static JPanel scoreBoard;
+    private static JTextArea scores;
     
     public ChatPanel() {
     	super();
     	
     	setLayout(new BorderLayout());
-
-        messageField = new JTextField(15);
-        messageBox = new JTextArea();
+    	
+        scores = new JTextArea("                             SCORES");
+        scores.setEditable(false);
+        scores.setBackground(Color.WHITE);
+        scores.setForeground(Color.BLACK);
+        DefaultCaret scoreCaret = (DefaultCaret) scores.getCaret();
+        scoreCaret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        
         sendingArea = new JPanel();
         
-        messageField.addActionListener(createMessageAction());
-
+        messageBox = new JTextArea();
         messageBox.setEditable(false);
         messageBox.setLineWrap(true);
+        messageBox.setBackground(Color.WHITE);
+        messageBox.setForeground(Color.BLACK);
 
-        sendingArea.add(messageField);
-
-        messageField.setBackground(Color.BLACK);
-        messageBox.setBackground(new Color(0,0,0,255));
-        sendingArea.setBackground(new Color(0,0,0,255));
-        
+        messageField = new JTextField(20);
         messageField.setForeground(Color.BLACK);
-        messageBox.setForeground(Color.WHITE);
-
+        messageField.setBackground(Color.WHITE);
+        messageField.addActionListener(createMessageAction());
+        
+        sendingArea.add(messageField);
+        sendingArea.setBackground(Color.WHITE);
+        
         DefaultCaret caret = (DefaultCaret) messageBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         scrollArea = new JScrollPane(messageBox);
-        scrollArea.setBackground(Color.BLACK);
+        scrollArea.setBackground(Color.WHITE);
 
         scrollArea.getVerticalScrollBar().setUI(new BasicScrollBarUI(){   
             @Override
@@ -63,8 +70,13 @@ public class ChatPanel extends JPanel{
 
         });
 
-        displayMessage("   WELCOME TO AGARIO\n");
-        setPreferredSize(new Dimension(200,400));
+        displayMessage("                    WELCOME TO AGARIO\n");
+        setPreferredSize(new Dimension(300,680));
+        scoreBoard = new JPanel();
+        scores.setPreferredSize(new Dimension(300,200));
+        scoreBoard.setPreferredSize(new Dimension(300,225));
+        scoreBoard.add(scores);
+        add(scoreBoard, BorderLayout.NORTH);
         add(scrollArea,BorderLayout.CENTER);
         add(sendingArea, BorderLayout.SOUTH);
     }
@@ -82,7 +94,7 @@ public class ChatPanel extends JPanel{
                     messageField.setText("");
                 }
 
-                messageField.setBackground(Color.BLACK);
+                messageField.setBackground(Color.WHITE);
 //                GameGUI.focusOnGame();
             }
         };
