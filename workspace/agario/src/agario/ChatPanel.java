@@ -6,11 +6,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.plaf.basic.*;
 
-public class ChatPanel extends JPanel{
-
-	/**
-	 * 
-	 */
+public class ChatPanel extends JPanel implements Runnable{
 	private static final long serialVersionUID = -4248861492763515952L;
 	private static JPanel sendingArea;
     private static JScrollPane scrollArea;
@@ -18,6 +14,7 @@ public class ChatPanel extends JPanel{
     private static JTextArea messageBox;
     private static JPanel scoreBoard;
     private static JTextArea scores;
+    private ChatModule chatModule;
     
     public ChatPanel() {
     	super();
@@ -79,30 +76,42 @@ public class ChatPanel extends JPanel{
         add(scoreBoard, BorderLayout.NORTH);
         add(scrollArea,BorderLayout.CENTER);
         add(sendingArea, BorderLayout.SOUTH);
+        
+        
+        this.chatModule = new ChatModule("202.92.144.45", 80, "Player");
+        
+		Thread thread = new Thread(this);
+		thread.start();
+        
     }
     
     private ActionListener createMessageAction(){
         ActionListener temp = new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
-                if(messageField.getText().toLowerCase().equals("bye")){ //add && game over
-                    // player _ disconnected
+            	String msg = messageField.getText();
+                if(msg.toLowerCase().equals("bye")){ //add && game over
+                    if(chatModule.getConnected()) chatModule.disconnectFromLobby();
+                	
                     System.exit(0);
-                }else if(!messageField.getText().equals("")){
-                    displayMessage("You: " + messageField.getText() + "\n");
+                } else if(msg.toLowerCase().equals(":q")){
+                	chatModule.setConnected();
+                	
+                	messageBox.setCaretPosition(messageBox.getDocument().getLength());
+                    messageField.setText("");
+;                } else if(!msg.equals("")){
+                    displayMessage("You: " + msg + "\n");
+                    if(chatModule.getConnected()) chatModule.sendChat(msg);
                          
                     messageBox.setCaretPosition(messageBox.getDocument().getLength());
                     messageField.setText("");
                 }
-
-                messageField.setBackground(Color.WHITE);
-//                GameGUI.focusOnGame();
             }
         };
 
         return temp;
     }
 
-	private void displayMessage(String message) {
+	public void displayMessage(String message) {
 		// TODO Auto-generated method stub
 		messageBox.setSize(400,100);
         messageBox.append(message);
@@ -115,5 +124,17 @@ public class ChatPanel extends JPanel{
         zero.setMaximumSize(new Dimension(0, 0));
         return zero;
     }
+	
+	@Override
+	public void run() {
+		if(this.chatModule.connectToLobby("AB5L", this)) {
+			this.displayMessage("type :q to quit chat lobby\n");
+			while(this.chatModule.getConnected()) {
+				this.chatModule.receiveChat(this);
+			}
+        	chatModule.disconnectFromLobby();
+        	displayMessage("Disconnected from chat lobby.\n");
+		}
+	}
 
 }

@@ -13,7 +13,6 @@ public class Window extends Canvas{
 
 	public Window(int width, int height, String title, Game game) {
 		JFrame frame = new JFrame(title);
-//		JPanel gamePanel = new JPanel();
 		JPanel chatPanel = new JPanel();
 		ChatPanel chat = new ChatPanel();
 		
