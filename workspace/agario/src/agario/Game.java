@@ -33,8 +33,9 @@ public class Game extends Canvas implements Runnable{
 		this.gameClient = new GameClient(0, 0, "jem", this);
 		
 		handler = new Handler();
+		r = new Random();
 		this.addKeyListener(new KeyInput(handler));
-		this.player = new Blob(25, 25, ID.Blob, handler);
+		this.player = new Blob(r.nextInt(1050), r.nextInt(750), ID.Blob, handler);
 		handler.player = this.player;
 		
 		this.requestFocusInWindow(true); // this will make the game focus on the window for interaction
