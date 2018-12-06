@@ -34,16 +34,14 @@ public final class Blob extends GameObject implements Runnable{
 	 Method for checking collision of blob and food
 	 */
 	private void collision() {
-		for(int i = 0; i < handler.object.size(); i++) {
-			GameObject tempObject = handler.object.get(i);
-			
-			if(tempObject.getID() == ID.Food) {
-				if(getBounds().intersects(tempObject.getBounds())) {
+		for(int i = 0; i < handler.foods.size(); i++) {
+			Food food = handler.foods.get(i);
+		
+				if(getBounds().intersects(food.getBounds())) {
 					size++;
 					score++;
-					handler.removeObject(tempObject);
+					handler.removeFood(food);
 				}
-			}
 		}
 	}
 	/*
@@ -54,6 +52,14 @@ public final class Blob extends GameObject implements Runnable{
 		g.fillOval(x, y, 50+size, 50+size);
 	}
 
+	public String convertToString(){
+		String string = "";
+		string += netIndex + "=";
+		string += x + "=";
+		string += y;
+		return string;
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

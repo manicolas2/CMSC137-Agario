@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public final class GameServer implements Runnable{
 	// Constants
@@ -15,18 +16,20 @@ public final class GameServer implements Runnable{
 	public final int 		WAITING		 = 3;
 
 	// Attributes
-	String playerData;
-	int currPlayerCount = 0;
-	int numPlayers;					//exact number of players that must be connected 
-	DatagramSocket serverSocket = null;
-	GameState gameState;
-	int gameStatus = WAITING;
-	Thread t = new Thread(this);
-	
+	String 			playerData;
+	int 			currPlayers 		= 0;
+	int 			maxPlayers;					
+	DatagramSocket 	serverSocket 		= null;
+	GameState 		gameState;
+	int 			gameStatus 			= WAITING;
+	Thread 			t 					= new Thread(this);
+	Random 			r;
 	
 	// Constructor
-	public GameServer(int port, int numPlayers) {
-		this.numPlayers = numPlayers;
+	public GameServer(int port, int maxPlayers) {
+		this.maxPlayers = maxPlayers;
+		this.gameState 	= new GameState();
+				
 		try {
 			serverSocket = new DatagramSocket(port);
 			serverSocket.setSoTimeout(100);
@@ -37,13 +40,47 @@ public final class GameServer implements Runnable{
 			System.out.println(e);
 		}
 		
-		this.gameState = new GameState();
-		
+		// Start thread
 		this.t.start();
+		
+		// Start generating food
+		while(true) {
+//			if(this.gameStatus == IN_PROGRESS || this.gameStatus == START) {
+				r = new Random();
+				try {
+					Thread.sleep(r.nextInt(200));
+				}catch(Exception e){
+					System.out.println(e);
+	            }
+				
+				if(r.nextInt(10) == 5){
+	                this.gameState.addFood(new NetFood(r.nextInt(1050), r.nextInt(750)));
+	                this.broadcast("INIT_FOOD " + this.gameState.convertFoodString());
+	            }
+//			}
+		}
 	}
 	
-	
-	//Methods
+	// Methods
+
+	public void broadcast(String msg){
+		for(int i = 0; i < this.gameState.netBlobs.size(); i++) {
+			NetBlob blob = this.gameState.netBlobs.get(i);
+			this.send(blob, msg);
+		}
+	}
+
+	public void send(NetBlob blob, String msg){
+		DatagramPacket packet;	
+		byte buf[] = msg.getBytes();		
+		packet = new DatagramPacket(buf, buf.length, blob.getAddress(), blob.getPort());
+		
+		try{
+			serverSocket.send(packet);
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void run() {
@@ -58,46 +95,71 @@ public final class GameServer implements Runnable{
 			// Convert byte array to string
 			this.playerData = new String(buf);
 			this.playerData = this.playerData.trim();
-			// Start
+			
+			
 			switch(this.gameStatus) {
+			
+				// If have not reached maximum number of players
 				case WAITING:
-					System.out.println("WAITING...");
+					
+					// If data received starts with CONNECT
 					if (playerData.startsWith("CONNECT")){
+						
 						// Get player data
 						String tokens[] = playerData.split(" ");
-						NetPlayer player = new NetPlayer(tokens[1], packet.getAddress(), packet.getPort());
+						NetBlob blob = new NetBlob(tokens[1], packet.getAddress(), packet.getPort());
+						
+						// Inform
 						System.out.println("Player connected: "+ tokens[1]);
 						
-						this.gameState.update(tokens[1].trim(), player);
-						this.currPlayerCount++;
-						if (this.currPlayerCount == this.numPlayers){
+						// Update server gameState
+						this.gameState.addBlob(blob);
+						
+						// Send confirmation
+						this.send(blob, "CONNECTED " + this.currPlayers);
+						
+						// Update number of currently connected players
+						this.currPlayers++;
+						
+						// If reached max players, change game status
+						if (this.currPlayers == this.maxPlayers){
 							this.gameStatus = START;
 						}
 					}
 					break;
+					
+				// If have reached maximum number of players, start game
 				case START:
 					System.out.println("Game started");
+					this.broadcast("INIT_FOOD " + this.gameState.convertFoodString());
+					this.broadcast("INIT_BLOB " + this.gameState.convertBlobString());
 					this.gameStatus = IN_PROGRESS;
 					break;
-				case IN_PROGRESS:
-					System.out.println("Game in progress");
 					
-					if (this.playerData.startsWith("PLAYER")){
-						//Tokenize:
+				// If game is currently in progress
+				case IN_PROGRESS:
+					
+					// If data received is about movement update
+					if (this.playerData.startsWith("MOVE")){
+						
+						//Tokenize
 						String[] playerInfo = playerData.split(" ");					  
+						String[] blob_info		= playerInfo[1].split("=");
+						int index = Integer.parseInt(blob_info[0]);
+						int x = Integer.parseInt(blob_info[1].trim());
+						int y = Integer.parseInt(blob_info[2].trim());
+						
+//						System.out.println("server" +playerData);
+						//Update blob in gameState
+						NetBlob blob = this.gameState.getBlob(index);					  
+						blob.setX(x);
+						blob.setY(y);
 					  
-						String pname = playerInfo[1];
-						int x = Integer.parseInt(playerInfo[2].trim());
-						int y = Integer.parseInt(playerInfo[3].trim());
-					  
-						//Get the player from the game state
-						NetPlayer player = (NetPlayer)this.gameState.getPlayers().get(pname);					  
-						player.setX(x);
-						player.setY(y);
-					  
-						//Update the game state
-						this.gameState.update(pname, player);
+						//Send updated blob
+//						System.out.print(blob.convertToString());
+						this.broadcast("MOVE " + index + "=" + blob.convertToString());
 					}
+					
 					break;
 			}
 		}
@@ -106,7 +168,7 @@ public final class GameServer implements Runnable{
 	// Main
 	public static void main(String[] args) {
 		int port 			= 4444;
-		int numOfPlayers 	= 3;
+		int numOfPlayers 	= 2;
 		
 		new GameServer(port, numOfPlayers);
 	}

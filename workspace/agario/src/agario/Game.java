@@ -20,7 +20,8 @@ public class Game extends Canvas implements Runnable{
 	private boolean running = false;
 	private Handler handler;
 	private Random r;
-	
+	private Blob player;
+	private GameClient gameClient;
 	/*
 	 The game constructor, it creates the window and the objects needed
 	 in the game such as the blob and the food.
@@ -28,28 +29,28 @@ public class Game extends Canvas implements Runnable{
 	
 	public Game() {
 		Window gameWindow = new Window(WIDTH, HEIGHT, "Agario", this);	
-//		ChatPanel chat = new ChatPanel();
+
+		this.gameClient = new GameClient(0, 0, "jem", this);
 		
-//		JFrame gameFrame = gameWindow.getFrame();
-//		gameFrame.add(chat, BorderLayout.EAST);
-//		gameFrame.pack();
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
-		handler.addObject(new Blob(25, 25, ID.Blob, handler));
+		this.player = new Blob(25, 25, ID.Blob, handler);
+		handler.player = this.player;
+		
 		this.requestFocusInWindow(true); // this will make the game focus on the window for interaction
 		// add food
-		while(true) {
-			r = new Random();
-			try {
-				Thread.sleep(r.nextInt(200));
-			}catch(Exception e){
-				System.out.println(e);
-            }
-			
-			if(r.nextInt(10) == 5){
-                handler.addObject(new Food(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.Food));
-            }
-		}
+//		while(true) {
+//			r = new Random();
+//			try {
+//				Thread.sleep(r.nextInt(200));
+//			}catch(Exception e){
+//				System.out.println(e);
+//            }
+//			
+//			if(r.nextInt(10) == 5){
+//                handler.addFood(new Food(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.Food));
+//            }
+//		}
 	}
 	
 	public synchronized void start() {
@@ -80,6 +81,8 @@ public class Game extends Canvas implements Runnable{
 			while(delta >= 1) {
 				tick();
 				delta--;
+				if(this.gameClient.getConnected()) 
+					this.gameClient.sendMessage("MOVE " + this.handler.player.convertToString());
 			}
 			if(running)
 				render();
@@ -125,6 +128,13 @@ public class Game extends Canvas implements Runnable{
 		else return var;
 	}
 	
+	public Blob getPlayer() {
+		return this.player;
+	}
+	
+	public Handler getHandler() {
+		return this.handler;
+	}
 	public static void main(String args[]) {
 		new Game();
 	}

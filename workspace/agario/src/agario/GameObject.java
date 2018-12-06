@@ -8,6 +8,7 @@ public abstract class GameObject {
 	protected int x, y;
 	protected ID id;
 	protected int speedX, speedY;
+	protected int netIndex;
 	
 	public GameObject(int x, int y, ID id) {
 		this.x = x;
@@ -27,6 +28,9 @@ public abstract class GameObject {
 	}
 	public void setID(ID id) {
 		this.id = id;
+	}
+	public void setNetIndex(int index) {
+		this.netIndex = index;
 	}
 	public void setSpeedX(int speedX) {
 		this.speedX = speedX;
@@ -49,6 +53,9 @@ public abstract class GameObject {
 	}
 	public int getSpeedY() {
 		return speedY;
+	}
+	public int getNetIndex() {
+		return this.netIndex;
 	}
 }
  
